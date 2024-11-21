@@ -99,7 +99,7 @@ function showResult(player1Name, player2Name) {
   showResultMessage('Black is Victorious : ' + player2Name)
 }
 
-function isAnySpaceEmptyInBoard() {
+function isAnySpaceEmptyInBoard(player1Name, player2Name) {
   const board = getBoard();
 
   for (let index = 0; index < board.length; index++) {
@@ -274,8 +274,9 @@ function isRowColomnValid(row, column) {
 
 function startOthello(playerNumber, player1Name, player2Name) {
   printBoard();
+  console.log(player1Name);
 
-  if (!isAnySpaceEmptyInBoard()) {
+  if (!isAnySpaceEmptyInBoard(player1Name, player2Name)) {
     return 0;
   }
 
