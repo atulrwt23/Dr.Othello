@@ -1,4 +1,4 @@
-function messageForUser() {
+function composeInstrictions() {
   const segment1 = "\nIt's show time let's play rock-paper-sicssor";
   const segment2 = "\n\nFor Rock choose 🪨 : R";
   const segment3 = "\nFor Paper choose  📄 : P";
@@ -22,18 +22,38 @@ function getComputerChoice() {
   return "S";
 }
 
-function WinLoseOrTie(userChoice, deviceChoice) {
+function getArticle(choice, player) {
+  if (choice === "S") {
+    return player + "\n choose Sicssor : ✂️";
+  }
+
+  if (choice === "P") {
+    return player + "\n choose Papaer : 📄";
+  }
+
+  return player + "\nYou choose Rock : 🪨";
+}
+
+function getArticleMessage(userChoice, deviceChoice) {
+  const userArticle = getArticle(userChoice, "You");
+  const deviceArticle = getArticle(deviceChoice, "Device");
+  
+  return userArticle + deviceArticle;
+}
+
+function play(userChoice, deviceChoice) {
   const choicePair = userChoice + deviceChoice;
+  const article = getArticleMessage(userChoice, deviceChoice);
 
   if (userChoice === deviceChoice) {
-    return "\nWOW IT'S A TIE!!\nLet's play again.";
+    return article + "\nWOW IT'S A TIE!!\nLet's play again.";
   }
 
   if (choicePair === "RS" || choicePair === "PR" || choicePair === "SP") {
-    return "\nYOU WIN!!\nYou are good.\nLet's play again.\n";
+    return article + "\nYOU WIN!!\nYou are good.\nLet's play again.\n";
   }
 
-  return "\nYOU LOSE!!\nYou don't know how to play.\nLet's play again."
+  return article + "\nYOU LOSE!!\nYou but you can still win.\nLet's play again."
 }
 
 function isChoiceValid(userChoice) {
@@ -45,19 +65,17 @@ function continueGame(userChoice) {
     return "\nWhy do this to me ?\nPlease choose a valid input in CAPITAL!!!";
   }
 
-  return WinLoseOrTie(userChoice, getComputerChoice());
+  return play(userChoice, getComputerChoice());
 }
 
-function getUserChoice() {
-  return prompt(messageForUser());
+function rockPaperSicssor() {
+  const userChoice = prompt(composeInstrictions());
+
+  return continueGame(userChoice);
 }
 
 function isUserPlaying() {
   return confirm("\nAre you ready for the challenge!!");
-}
-
-function rockPaperSicssor() {
-  return continueGame(getUserChoice());
 }
 
 function askUserToPlay() {
@@ -65,6 +83,7 @@ function askUserToPlay() {
     return "\nIt was fun knowing you, let's play next time.\n";
   }
 
+  console.clear();
   console.log(rockPaperSicssor());
 
   return askUserToPlay();
