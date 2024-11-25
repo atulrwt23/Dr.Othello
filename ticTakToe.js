@@ -18,12 +18,12 @@ function getMark(playerNumber) {
   return playerNumber % 2 === 0 ? "✘" : "☢";
 }
 
-function replace(playerChoice, string, playerNumber) {
+function placeMark(boxNumber, string, playerNumber) {
   let grid = "";
   const mark = getMark(playerNumber);
 
   for (let index = 0; index < string.length; index++) {
-    if (playerChoice === string[index]) {
+    if (boxNumber === string[index]) {
       grid = grid + mark;
       continue;
     }
@@ -51,7 +51,7 @@ function isWinningMatchFound(string, start, end, diff, seperation) {
   return false;
 }
 
-function isTheirAWinner(str) {
+function isWinnerFound(str) {
   let isValid = isWinningMatchFound(str, 0, 3, 3, 1);
   isValid = isValid || isWinningMatchFound(str, 0, 7, 1, 3);
   isValid = isValid || isWinningMatchFound(str, 0, 1, 4, 1);
@@ -60,7 +60,7 @@ function isTheirAWinner(str) {
   return isValid;
 }
 
-function isChoiceVlaid(choice, grid) {
+function isChoiceValid(choice, grid) {
   for (let index = 0; index < grid.length; index++) {
     if (choice === grid[index]) {
       return true;
@@ -70,39 +70,42 @@ function isChoiceVlaid(choice, grid) {
   return false;
 }
 
-function giveResult(string, playerNumber, player1Name, player2Name) {
+function composeResult(string, playerNumber, player1Name, player2Name) {
   const player = playerNumber % 2 !== 0 ? player1Name : player2Name;
   const statement1 = player + " has won the match.";
   const statement2 = "The match is a tie.";
 
-  return isTheirAWinner(string) ? statement1 : statement2;
+  return isWinnerFound(string) ? statement1 : statement2;
 }
 
-function printBoard(string) {
+function displayUpdatedGrid(string) {
   console.clear();
   console.log("\n" + displayGrid(string));
 }
 
 function play(player1Name, player2Name, playerNumber, string) {
   let validPlay = 0;
-  while (validPlay <= 9 && !isTheirAWinner(string)) {
-    printBoard(string);
-    const choice = prompt(playMessage(player1Name, player2Name, playerNumber));
-    string = replace(choice, string, playerNumber);
 
-    if (!isChoiceVlaid(choice, string)) {
+  while (validPlay <= 9 && !isWinnerFound(string)) {
+    displayUpdatedGrid(string);
+
+    const choice = prompt(playMessage(player1Name, player2Name, playerNumber));
+
+    string = placeMark(choice, string, playerNumber);
+
+    if (!isChoiceValid(choice, string)) {
       validPlay--;
     }
 
     validPlay++;
     playerNumber++;
   }
-  printBoard(string);
+  displayUpdatedGrid(string);
 
-  return giveResult(string, playerNumber, player1Name, player2Name);
+  return composeResult(string, playerNumber, player1Name, player2Name);
 }
 
-function ticTakToe() {
+function ticTacToe() {
   const stringValue = "123456789";
   const player1Name = prompt("Enter player one name : ");
   const player2Name = prompt("Enter player two name : ");
@@ -110,4 +113,4 @@ function ticTakToe() {
   console.log(play(player1Name, player2Name, 0, stringValue));
 }
 
-ticTakToe();
+ticTacToe();
